@@ -4,16 +4,27 @@
     @csrf
 
     <div>
-        <label>Category Name</label><br>
-        <input type="text" name="name">
-    </div>
+    <label>Category Name</label><br>
 
-    <br>
+    @error('name')
+        <p style="color:red">{{ $message }}</p>
+    @enderror
 
-    <div>
-        <label>Description</label><br>
-        <textarea name="description"></textarea>
-    </div>
+    <input
+        type="text"
+        name="name"
+        value="{{ old('name') }}">
+</div>
+
+<div>
+    <label>Description</label><br>
+
+    @error('description')
+        <p style="color:red">{{ $message }}</p>
+    @enderror
+
+    <textarea name="description">{{ old('description') }}</textarea>
+</div>
 
     <br>
 

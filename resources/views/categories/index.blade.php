@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
+    @if (session('success'))
+    <div style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border: 1px solid #c3e6cb;">
+        {{ session('success') }}
+    </div>
+@endif
+
     <h1>Categories</h1>
 
     <table border="1">
