@@ -11,12 +11,21 @@
 
             <div class="bg-white shadow rounded-lg p-6">
 
+                {{-- Success Message --}}
                 @if(session('success'))
                     <div class="mb-6 rounded-md border border-green-200 bg-green-100 px-4 py-3 text-green-700">
                         {{ session('success') }}
                     </div>
                 @endif
 
+                @if(session('error'))
+                    <div class="mb-6 rounded-md border border-red-200 bg-red-100 px-4 py-3 text-red-700">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+
+                {{-- Header --}}
                 <div class="flex items-center justify-between mb-6">
 
                     <h3 class="text-2xl font-bold text-gray-800">
@@ -33,6 +42,8 @@
 
                 </div>
 
+
+                {{-- Items Table --}}
                 <div class="overflow-x-auto">
 
                     <table class="min-w-full border border-gray-200">
@@ -53,10 +64,6 @@
                                     Purchase Price
                                 </th>
 
-                                <th class="border px-4 py-3 text-right">
-                                    Expected Price
-                                </th>
-
                                 <th class="border px-4 py-3 text-center">
                                     Status
                                 </th>
@@ -69,37 +76,34 @@
 
                         </thead>
 
+
                         <tbody>
 
                             @forelse($items as $item)
 
                                 <tr class="hover:bg-gray-50">
 
-                                    <td class="border px-4 py-3 font-medium">
+                                    {{-- Name --}}
+                                    <td class="border px-4 py-3 font-medium text-gray-800">
                                         {{ $item->name }}
                                     </td>
 
-                                    <td class="border px-4 py-3">
+
+                                    {{-- Category --}}
+                                    <td class="border px-4 py-3 text-gray-700">
                                         {{ $item->category->name }}
                                     </td>
 
+
+                                    {{-- Purchase Price --}}
                                     <td class="border px-4 py-3 text-right">
                                         ₱{{ number_format($item->purchase_price, 2) }}
                                     </td>
-
-                                    <td class="border px-4 py-3 text-right">
-
-                                        @if($item->expected_selling_price)
-                                            ₱{{ number_format($item->expected_selling_price, 2) }}
-                                        @else
-                                            -
-                                        @endif
-
-                                    </td>
-
+                             
+                                    {{-- Status --}}
                                     <td class="border px-4 py-3 text-center">
 
-                                        @if($item->status == 'available')
+                                        @if($item->status === 'available')
 
                                             <span class="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
                                                 Available
@@ -115,42 +119,69 @@
 
                                     </td>
 
+
+                                    {{-- Actions --}}
                                     <td class="border px-4 py-3">
 
                                         <div class="flex justify-center gap-2">
 
+                                            {{-- Edit --}}
                                             <a
                                                 href="{{ route('items.edit', $item) }}"
-                                                class="rounded bg-yellow-500 px-3 py-1 text-white hover:bg-yellow-600 transition">
+                                                class="rounded bg-yellow-500 px-3 py-1 text-sm text-white hover:bg-yellow-600 transition">
 
                                                 Edit
 
                                             </a>
 
-                                            <form action="{{ route('items.destroy', $item) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
 
-                                                    <button
-                                                        type="submit"
-                                                        onclick="return confirm('Are you sure you want to delete this item?')"
-                                                        class="rounded bg-red-600 px-3 py-1 text-white hover:bg-red-700 transition">
+                                            {{-- Delete --}}
+                                            <form
+                                                action="{{ route('items.destroy', $item) }}"
+                                                method="POST">
 
-                                                        Delete
+                                                @csrf
+                                                @method('DELETE')
 
-                                                    </button>
-                                                </form>
+                                                <button
+                                                    type="submit"
+                                                    onclick="return confirm('Are you sure you want to delete this item?')"
+                                                    class="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700 transition">
+
+                                                    Delete
+
+                                                </button>
+
+                                            </form>
+
+
+                                            {{-- Mark as Sold --}}
+                                            @if($item->status === 'available')
+
+                                                <a
+                                                    href="{{ route('items.sell', $item) }}"
+                                                    class="rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700 transition">
+
+                                                    Mark as Sold
+
+                                                </a>
+
+                                            @endif
+
                                         </div>
 
                                     </td>
 
                                 </tr>
 
+
                             @empty
 
                                 <tr>
 
-                                    <td colspan="6" class="border px-4 py-6 text-center text-gray-500">
+                                    <td
+                                        colspan="6"
+                                        class="border px-4 py-6 text-center text-gray-500">
 
                                         No items found.
 

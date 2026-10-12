@@ -147,63 +147,6 @@
                             @enderror
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Expected Selling Price
-                            </label>
-
-                            <input
-                                type="number"
-                                step="0.01"
-                                name="expected_selling_price"
-                                value="{{ old('expected_selling_price') }}"
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-
-                            @error('expected_selling_price')
-                                <p class="mt-2 text-sm text-red-600">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Shipping Fee
-                            </label>
-
-                            <input
-                                type="number"
-                                step="0.01"
-                                name="shipping_fee"
-                                value="{{ old('shipping_fee', 0) }}"
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-
-                            @error('shipping_fee')
-                                <p class="mt-2 text-sm text-red-600">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Other Expenses
-                            </label>
-
-                            <input
-                                type="number"
-                                step="0.01"
-                                name="other_expenses"
-                                value="{{ old('other_expenses', 0) }}"
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-
-                            @error('other_expenses')
-                                <p class="mt-2 text-sm text-red-600">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Notes

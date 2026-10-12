@@ -15,8 +15,7 @@ class Item extends Model
         'sold_at',
         'quantity',
         'purchase_price',
-        'expected_selling_price',
-        'actual_selling_price',
+        'sold_price',
         'shipping_fee',
         'other_expenses',
         'status',
@@ -25,10 +24,27 @@ class Item extends Model
 
     protected $casts = [
         'purchase_date' => 'date',
+        'sold_at' => 'date',
     ];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function getTotalCostAttribute()
+    {
+        return $this->purchase_price
+            + $this->shipping_fee
+            + $this->other_expenses;
+    }
+
+    public function getProfitAttribute()
+    {
+        if ($this->sold_price === null) {
+            return null;
+        }
+
+        return $this->sold_price - $this->total_cost;
     }
 }

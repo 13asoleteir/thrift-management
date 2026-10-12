@@ -39,9 +39,6 @@ class ItemController extends Controller
             'purchase_date' => 'required|date',
             'quantity' => 'required|integer|min:1',
             'purchase_price' => 'required|numeric|min:0',
-            'expected_selling_price' => 'nullable|numeric|min:0',
-            'shipping_fee' => 'nullable|numeric|min:0',
-            'other_expenses' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
 
@@ -53,8 +50,6 @@ class ItemController extends Controller
             'quantity' => $request->quantity,
             'purchase_price' => $request->purchase_price,
             'expected_selling_price' => $request->expected_selling_price,
-            'shipping_fee' => $request->shipping_fee ?? 0,
-            'other_expenses' => $request->other_expenses ?? 0,
             'notes' => $request->notes,
         ]);
 
@@ -94,8 +89,6 @@ class ItemController extends Controller
             'quantity' => 'required|integer|min:1',
             'purchase_price' => 'required|numeric|min:0',
             'expected_selling_price' => 'nullable|numeric|min:0',
-            'shipping_fee' => 'nullable|numeric|min:0',
-            'other_expenses' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
 
@@ -107,8 +100,6 @@ class ItemController extends Controller
             'quantity' => $request->quantity,
             'purchase_price' => $request->purchase_price,
             'expected_selling_price' => $request->expected_selling_price,
-            'shipping_fee' => $request->shipping_fee ?? 0,
-            'other_expenses' => $request->other_expenses ?? 0,
             'notes' => $request->notes,
         ]);
 
@@ -127,5 +118,43 @@ class ItemController extends Controller
         return redirect()
             ->route('items.index')
             ->with('success', 'Item deleted successfully.');
+    }
+
+    public function sell(Item $item)
+    {
+        if ($item->status === 'sold') {
+            return redirect()
+                ->route('items.index')
+                ->with('error', 'This item has already been sold.');
+        }
+
+        return view('items.sell', compact('item'));
+    }
+
+    public function markAsSold(Request $request, Item $item)
+    {
+        if ($item->status === 'sold') {
+            return redirect()
+                ->route('items.index')
+                ->with('error', 'This item has already been sold.');
+        }
+        $validated = $request->validate([
+            'sold_price' => 'required|numeric|min:0',
+            'sold_at' => 'required|date',
+            'shipping_fee' => 'nullable|numeric|min:0',
+            'other_expenses' => 'nullable|numeric|min:0',
+        ]);
+
+        $item->update([
+            'sold_price' => $validated['sold_price'],
+            'sold_at' => $validated['sold_at'],
+            'shipping_fee' => $validated['shipping_fee'] ?? 0,
+            'other_expenses' => $validated['other_expenses'] ?? 0,
+            'status' => 'sold',
+        ]);
+
+        return redirect()
+            ->route('items.index')
+            ->with('success', 'Item marked as sold successfully.');
     }
 }
